@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@theme {
+  --color-azul: #0f1c2e;
+}
