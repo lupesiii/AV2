@@ -1,16 +1,29 @@
 import { Plane, X } from "lucide-react";
 import { type Dispatch, useContext } from "react";
-import type { Aeronave } from "@/types/aeronave";
 import { BlurContext } from "../context/blurContext";
+import type { Aeronave } from "../types/aeronave";
+import type { Categoria } from "../types/categoria";
+import type { Etapa } from "../types/etapa";
+import type { Peca } from "../types/peca";
+import type { Teste } from "../types/teste";
 import InfoLabel from "./info-iabel";
 import Text from "./text";
 
 interface InfoProps {
-	data: Aeronave;
+	data: Aeronave | Etapa | Peca | Teste;
+	titulo: string;
+	subtitulo: string;
+	categoria: Categoria;
 	setModalOpen: Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function InfoCard({ data, setModalOpen }: InfoProps) {
+export default function InfoCard({
+	data,
+	titulo,
+	subtitulo,
+	categoria,
+	setModalOpen,
+}: InfoProps) {
 	const blurValue = useContext(BlurContext);
 
 	function handleVisible() {
@@ -18,9 +31,9 @@ export default function InfoCard({ data, setModalOpen }: InfoProps) {
 	}
 
 	return (
-		<form className="absolute w-7/10 h-7/10 left-1/2 top-1/2 -translate-1/2 bg-white shadow-xl">
+		<form className="absolute w-7/10 h-fit left-1/2 top-1/2 -translate-1/2 bg-white shadow-xl">
 			<nav className="relative flex items-center justify-center p-2 border-b border-black">
-				<Text>Aeronave</Text>
+				<Text>{categoria}</Text>
 
 				<X className="absolute right-2 top-1" onClick={handleVisible} />
 			</nav>
@@ -33,10 +46,10 @@ export default function InfoCard({ data, setModalOpen }: InfoProps) {
 						</span>
 						<article className="flex flex-col justify-center">
 							<Text variant="sm" color="azul-muted">
-								teste
+								{subtitulo}
 							</Text>
 							<Text variant="lg" className="first-letter:uppercase">
-								teste
+								{titulo}
 							</Text>
 						</article>
 					</div>

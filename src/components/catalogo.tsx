@@ -28,7 +28,7 @@ export default function Catalogo() {
 	return (
 		<Container
 			as="main"
-			className="overflow-hidden flex-col flex-wrap gap-10 m-5 relative"
+			className="overflow-hidden flex-col flex-wrap gap-10 m-5 relative min-h-9/10"
 		>
 			<section>
 				<Text as="h1" variant="lg-bold">
@@ -93,7 +93,13 @@ export default function Catalogo() {
 			</section>
 
 			{itemValue?.item && modalOpen && (
-				<InfoCard data={itemValue.item} setModalOpen={setModelOpen} />
+				<InfoCard
+					data={itemValue.item}
+					titulo="Teste"
+					subtitulo="Teste"
+					categoria={categoriaSelected}
+					setModalOpen={setModelOpen}
+				/>
 			)}
 		</Container>
 	);
