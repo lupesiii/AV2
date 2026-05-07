@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+}
+
 @theme {
   --color-azul: #0f1c2e;
+
+  --animate-fadeIn: fadeIn 1s ease-in-out normal;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(50px)
+    }
+    to {
+      opacity: 100;
+      transform: translateY(0px);
+    }
+  }
 }
+
+@layer components {
+  .blur_div{
+    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0);
+  }
+}
+

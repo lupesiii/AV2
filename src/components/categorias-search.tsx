@@ -25,8 +25,6 @@ export default function CategoriaSearch({
 			)}
 		>
 			{Object.values(Categoria).map((btn, index) => {
-				console.log(categoriaSelected, btn, categoriaSelected === btn);
-
 				return (
 					<BotaoCategoria
 						categoria={btn}
