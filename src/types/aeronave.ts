@@ -16,7 +16,7 @@ export interface Aeronave {
 	tipo: TipoAeronave;
 	capacidade: number;
 	alcance: number;
-	pecas: Peca[] | [];
-	etapas: Etapa[] | [];
-	testes: Teste[] | [];
+	pecas: Peca[];
+	etapas: Etapa[];
+	testes: Teste[];
 }

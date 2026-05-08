@@ -3,37 +3,35 @@
 
 import { type SubmitEventHandler, useState } from "react";
 import { useNavigate } from "react-router";
-import { aeronaves } from "@/mockup/aeronaves";
-import { type Aeronave, TipoAeronave } from "@/types/aeronave";
+import { useItem } from "@/hooks/useItem";
+import { testes } from "@/mockup/testes";
 import { Categoria } from "@/types/categoria";
-import { StatusPeca } from "@/types/peca";
-import { ResultadoTeste, TipoTeste } from "@/types/teste";
+import { ResultadoTeste, type Teste, TipoTeste } from "@/types/teste";
 
-const aeronaveMock: Aeronave = {
+const testeMock: Teste = {
 	id: "",
-	type: Categoria.aeronave,
-	codigo: "",
-	modelo: "",
-	tipo: TipoAeronave.Comercial,
-	alcance: 0,
-	capacidade: 0,
-	etapas: [],
-	pecas: [],
-	testes: [],
+	type: Categoria.teste,
+	tipo: TipoTeste.Aerodinamico,
+	resultado: ResultadoTeste.Reprovado,
 };
 
 export default function CadastroTeste() {
-	const [newAeronave, setNewAeronave] = useState<Aeronave>(aeronaveMock);
+	const { item } = useItem();
+	const [newTeste, setNewTeste] = useState<Teste>(testeMock);
 	const navigate = useNavigate();
 
 	const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
-		aeronaves.some((aeronave) => aeronave.codigo === newAeronave.codigo);
+		const exists = testes.some((teste) => teste.id === newTeste.id);
+		if (exists) {
+			alert("Código já existente");
+			return;
+		}
 
-		const idNewAeronave = Number(aeronaves[aeronaves.length - 1].id) + 1;
-		aeronaves.push({ ...newAeronave, id: idNewAeronave.toString() });
-		console.log(aeronaves);
+		if (item.type === Categoria.aeronave) {
+			item.testes.push(newTeste);
+		}
 		navigate("/");
 	};
 
@@ -42,7 +40,7 @@ export default function CadastroTeste() {
 	) {
 		const { name, value } = e.target;
 
-		setNewAeronave((prev) => ({ ...prev, [name]: value }));
+		setNewTeste((prev) => ({ ...prev, [name]: value }));
 	}
 
 	return (
@@ -77,7 +75,6 @@ export default function CadastroTeste() {
 							<input
 								type="text"
 								name="id"
-								value={newAeronave.codigo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -91,7 +88,6 @@ export default function CadastroTeste() {
 
 							<select
 								name="tipo"
-								value={newAeronave.tipo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -109,7 +105,6 @@ export default function CadastroTeste() {
 
 							<select
 								name="resultado"
-								value={newAeronave.tipo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required

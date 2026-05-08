@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { etapas } from "@/mockup/etapas";
-import { pecas } from "@/mockup/pecas";
-import { testes } from "@/mockup/testes";
 import { usuarios } from "@/mockup/usuario";
 import useAeronaves from "../hooks/useAeronaves";
 import { Categoria } from "../types/categoria";
@@ -66,19 +63,28 @@ export default function Catalogo() {
 			<section
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.etapa ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList data={etapas} setModalOpen={setModelOpen} />
+				<CatalogoList
+					data={aeronaves.flatMap((item) => item.etapas)}
+					setModalOpen={setModelOpen}
+				/>
 			</section>
 
 			<section
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.peça ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList data={pecas} setModalOpen={setModelOpen} />
+				<CatalogoList
+					data={aeronaves.flatMap((item) => item.pecas)}
+					setModalOpen={setModelOpen}
+				/>
 			</section>
 
 			<section
 				className={`grid grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.teste ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList data={testes} setModalOpen={setModelOpen} />
+				<CatalogoList
+					data={aeronaves.flatMap((item) => item.testes)}
+					setModalOpen={setModelOpen}
+				/>
 			</section>
 
 			<section

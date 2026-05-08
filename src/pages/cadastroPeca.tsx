@@ -3,36 +3,35 @@
 
 import { type SubmitEventHandler, useState } from "react";
 import { useNavigate } from "react-router";
-import { aeronaves } from "@/mockup/aeronaves";
-import { type Aeronave, TipoAeronave } from "@/types/aeronave";
+import { useItem } from "@/hooks/useItem";
 import { Categoria } from "@/types/categoria";
-import { StatusPeca, TipoPeca } from "@/types/peca";
+import { type Peca, StatusPeca, TipoPeca } from "@/types/peca";
 
-const aeronaveMock: Aeronave = {
-	id: "",
-	type: Categoria.aeronave,
-	codigo: "",
-	modelo: "",
-	tipo: TipoAeronave.Comercial,
-	alcance: 0,
-	capacidade: 0,
-	etapas: [],
-	pecas: [],
-	testes: [],
+const pecaMock: Peca = {
+	id: "0",
+	type: Categoria.peça,
+	nome: "",
+	fornecedor: "",
+	tipo: TipoPeca.Importada,
+	status: StatusPeca.producao,
 };
 
 export default function CadastroPeca() {
-	const [newAeronave, setNewAeronave] = useState<Aeronave>(aeronaveMock);
+	const { item } = useItem();
+	const [newPeca, setNewPeca] = useState<Peca>(pecaMock);
 	const navigate = useNavigate();
 
 	const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
-		aeronaves.some((aeronave) => aeronave.codigo === newAeronave.codigo);
+		if (item.type === Categoria.aeronave) {
+			const idNewPeca =
+				item.pecas.length === 0
+					? 0
+					: Number(item.pecas[item.pecas.length - 1].id) + 1;
 
-		const idNewAeronave = Number(aeronaves[aeronaves.length - 1].id) + 1;
-		aeronaves.push({ ...newAeronave, id: idNewAeronave.toString() });
-		console.log(aeronaves);
+			item.pecas.push({ ...newPeca, id: idNewPeca.toString() });
+		}
 		navigate("/");
 	};
 
@@ -41,7 +40,7 @@ export default function CadastroPeca() {
 	) {
 		const { name, value } = e.target;
 
-		setNewAeronave((prev) => ({ ...prev, [name]: value }));
+		setNewPeca((prev) => ({ ...prev, [name]: value }));
 	}
 
 	return (
@@ -76,7 +75,6 @@ export default function CadastroPeca() {
 							<input
 								type="text"
 								name="nome"
-								value={newAeronave.codigo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -91,7 +89,6 @@ export default function CadastroPeca() {
 							<input
 								type="text"
 								name="fornecedor"
-								value={newAeronave.modelo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -105,7 +102,6 @@ export default function CadastroPeca() {
 
 							<select
 								name="tipo"
-								value={newAeronave.tipo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -122,7 +118,6 @@ export default function CadastroPeca() {
 
 							<select
 								name="status"
-								value={newAeronave.tipo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required

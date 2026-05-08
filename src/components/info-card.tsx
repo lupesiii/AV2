@@ -4,9 +4,9 @@ import { useBlur } from "@/hooks/useBlur";
 import type { Funcionario } from "@/types/funcionario";
 import type { Aeronave } from "../types/aeronave";
 import { Categoria } from "../types/categoria";
-import type { Etapa } from "../types/etapa";
-import type { Peca } from "../types/peca";
-import type { Teste } from "../types/teste";
+import { type Etapa, StatusEtapa } from "../types/etapa";
+import { type Peca, StatusPeca } from "../types/peca";
+import { ResultadoTeste, type Teste } from "../types/teste";
 import IconCategoria from "./icon-categoria";
 import InfoLabel from "./info-iabel";
 import InfoList from "./info-list";
@@ -98,6 +98,56 @@ export default function InfoCard({ data, categoria }: InfoProps) {
 						})}
 					</div>
 				</section>
+
+				{data.type === Categoria.teste &&
+					data.resultado !== ResultadoTeste.Aprovado && (
+						<section>
+							<button
+								type="button"
+								className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+							>
+								Aprovar
+							</button>
+						</section>
+					)}
+
+				{data.type === Categoria.peça && data.status !== StatusPeca.pronta && (
+					<section>
+						<button
+							type="button"
+							className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+						>
+							{data.status === StatusPeca.producao ? "Em Transporte" : "Pronta"}
+						</button>
+					</section>
+				)}
+
+				{data.type === Categoria.etapa && (
+					<>
+						<section className="space-y-5">
+							<div className="grid grid-cols-2 grid-flow-row gap-3 pb-5 border-b border-black">
+								<Text className="col-span-2 flex items-center gap-1">
+									Funcionário
+								</Text>
+
+								<InfoList data={data.funcionarios} />
+							</div>
+						</section>
+
+						{data.status !== StatusEtapa.Concluida && (
+							<section>
+								<button
+									type="button"
+									className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+								>
+									{data.status === StatusEtapa.Pendente
+										? "Iniciar Etapa"
+										: "Concluir"}
+								</button>
+							</section>
+						)}
+					</>
+				)}
 
 				{data.type === Categoria.aeronave && (
 					<section className="space-y-5">

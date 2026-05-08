@@ -3,36 +3,48 @@
 
 import { type SubmitEventHandler, useState } from "react";
 import { useNavigate } from "react-router";
-import { aeronaves } from "@/mockup/aeronaves";
-import { type Aeronave, TipoAeronave } from "@/types/aeronave";
+import { useItem } from "@/hooks/useItem";
+import { usuarios } from "@/mockup/usuario";
 import { Categoria } from "@/types/categoria";
-import { StatusEtapa } from "@/types/etapa";
+import { type Etapa, StatusEtapa } from "@/types/etapa";
+import type { Funcionario } from "@/types/funcionario";
 
-const aeronaveMock: Aeronave = {
+const etapaMock: Etapa = {
 	id: "",
-	type: Categoria.aeronave,
-	codigo: "",
-	modelo: "",
-	tipo: TipoAeronave.Comercial,
-	alcance: 0,
-	capacidade: 0,
-	etapas: [],
-	pecas: [],
-	testes: [],
+	type: Categoria.etapa,
+	nome: "",
+	prazo: "",
+	status: StatusEtapa.Pendente,
+	funcionarios: [],
 };
 
 export default function CadastroEtapa() {
-	const [newAeronave, setNewAeronave] = useState<Aeronave>(aeronaveMock);
+	const { item } = useItem();
+	const [newEtapa, setNewEtapa] = useState<Etapa>(etapaMock);
+	const [usuario, setUsuario] = useState("");
+	const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
 	const navigate = useNavigate();
 
 	const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
-		aeronaves.some((aeronave) => aeronave.codigo === newAeronave.codigo);
+		if (funcionarios.length === 0) {
+			alert("Nenhum funcionario adicionado");
+			return;
+		}
 
-		const idNewAeronave = Number(aeronaves[aeronaves.length - 1].id) + 1;
-		aeronaves.push({ ...newAeronave, id: idNewAeronave.toString() });
-		console.log(aeronaves);
+		if (item.type === Categoria.aeronave) {
+			const idNewEtapa =
+				item.etapas.length === 0
+					? 0
+					: Number(item.etapas[item.etapas.length - 1].id) + 1;
+
+			item.etapas.push({
+				...newEtapa,
+				id: idNewEtapa.toString(),
+				funcionarios: funcionarios,
+			});
+		}
 		navigate("/");
 	};
 
@@ -41,7 +53,19 @@ export default function CadastroEtapa() {
 	) {
 		const { name, value } = e.target;
 
-		setNewAeronave((prev) => ({ ...prev, [name]: value }));
+		setNewEtapa((prev) => ({ ...prev, [name]: value }));
+	}
+
+	function adicionaFuncionario() {
+		if (!usuario.trim()) return;
+		const exists = funcionarios.find((user) => user.usuario === usuario);
+		if (exists) return;
+
+		const funcionario = usuarios.find((user) => user.usuario === usuario);
+		if (!funcionario) return;
+
+		setFuncionarios([funcionario, ...funcionarios]);
+		setUsuario("");
 	}
 
 	return (
@@ -76,7 +100,6 @@ export default function CadastroEtapa() {
 							<input
 								type="text"
 								name="nome"
-								value={newAeronave.codigo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -91,21 +114,19 @@ export default function CadastroEtapa() {
 							<input
 								type="text"
 								name="prazo"
-								value={newAeronave.modelo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
 							/>
 						</div>
 
-						<div>
+						<div className="md:col-span-2">
 							<label className="mb-2 block text-sm font-medium text-zinc-700">
 								Status
 							</label>
 
 							<select
 								name="status"
-								value={newAeronave.tipo}
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
 								required
@@ -114,6 +135,27 @@ export default function CadastroEtapa() {
 								<option value={StatusEtapa.Andamento}>Andamento</option>
 								<option value={StatusEtapa.Concluida}>Concluida</option>
 							</select>
+						</div>
+
+						<div>
+							<label className="mb-2 block text-sm font-medium text-zinc-700">
+								Funcionarios
+							</label>
+							<input
+								type="text"
+								value={usuario}
+								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
+								onChange={(e) => setUsuario(e.target.value)}
+							/>
+						</div>
+						<div className="mt-4 flex gap-4">
+							<button
+								type="button"
+								onClick={adicionaFuncionario}
+								className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+							>
+								Adicionar
+							</button>
 						</div>
 
 						<div className="mt-4 flex gap-4 md:col-span-2">

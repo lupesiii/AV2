@@ -1,12 +1,13 @@
 import { Categoria } from "@/types/categoria";
 import type { Etapa } from "@/types/etapa";
+import type { Funcionario } from "@/types/funcionario";
 import type { Peca } from "@/types/peca";
 import type { Teste } from "@/types/teste";
 import InfoItem from "./info-item";
 import Text from "./text";
 
 interface InfoListProps {
-	data: Etapa[] | Peca[] | Teste[] | null;
+	data: Etapa[] | Peca[] | Teste[] | Funcionario[] | null;
 }
 
 export default function InfoList({ data }: InfoListProps) {
@@ -35,6 +36,18 @@ export default function InfoList({ data }: InfoListProps) {
 					/>
 				);
 			}
+
+			if (item.type === Categoria.funcionario) {
+				return (
+					<InfoItem
+						key={item.id}
+						titulo={item.nome}
+						subtitulo={item.usuario}
+						adicional={item.nivelPermissao}
+					/>
+				);
+			}
+
 			return (
 				<InfoItem
 					key={item.id}

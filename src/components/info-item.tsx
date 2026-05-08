@@ -1,4 +1,3 @@
-import { Timer } from "lucide-react";
 import type { ComponentProps } from "react";
 import Text from "./text";
 
@@ -26,9 +25,6 @@ export default function InfoItem({
 				</Text>
 			</div>
 			<div className="inline-flex items-center gap-1 h-fit text-[14px] bg-gray-200 px-2 rounded-2xl lowercase">
-				<Text>
-					<Timer size="15px" />
-				</Text>
 				{adicional}
 			</div>
 		</section>
