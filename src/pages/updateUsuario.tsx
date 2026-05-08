@@ -22,7 +22,6 @@ export function UpdateUsuario() {
 		e.preventDefault();
 
 		const findIndex = usuarios.findIndex((user) => user.id === newUsuario.id);
-		console.log(findIndex);
 
 		if (findIndex !== -1) {
 			usuarios[findIndex] = newUsuario;

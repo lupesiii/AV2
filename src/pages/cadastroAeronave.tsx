@@ -35,7 +35,7 @@ export default function cadastroAeronave() {
 			return;
 		}
 
-		const idNewAeronave = Number(aeronaves[aeronaves.length - 1].id) + 1;
+		const idNewAeronave = crypto.randomUUID;
 		aeronaves.push({ ...newAeronave, id: idNewAeronave.toString() });
 		navigate("/");
 	};

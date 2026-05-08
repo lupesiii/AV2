@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+
 import Text from "./text";
 
 interface CatalogoSmallItemProps extends ComponentProps<"section"> {

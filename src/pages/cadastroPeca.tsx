@@ -25,10 +25,7 @@ export default function CadastroPeca() {
 		e.preventDefault();
 
 		if (item.type === Categoria.aeronave) {
-			const idNewPeca =
-				item.pecas.length === 0
-					? 0
-					: Number(item.pecas[item.pecas.length - 1].id) + 1;
+			const idNewPeca = crypto.randomUUID;
 
 			item.pecas.push({ ...newPeca, id: idNewPeca.toString() });
 		}

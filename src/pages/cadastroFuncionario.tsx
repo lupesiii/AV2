@@ -31,7 +31,7 @@ export default function cadastroFuncionario() {
 			return;
 		}
 
-		const idNewUsuario = Number(usuarios[usuarios.length - 1].id) + 1;
+		const idNewUsuario = crypto.randomUUID;
 		usuarios.push({ ...newUsuario, id: idNewUsuario.toString() });
 	};
 

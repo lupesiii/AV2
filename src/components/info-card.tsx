@@ -1,6 +1,8 @@
 import { Plus, X } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useBlur } from "@/hooks/useBlur";
+import { useCatalogoStore } from "@/store/catalogoData";
 import type { Funcionario } from "@/types/funcionario";
 import type { Aeronave } from "../types/aeronave";
 import { Categoria } from "../types/categoria";
@@ -20,13 +22,15 @@ interface InfoProps {
 export default function InfoCard({ data, categoria }: InfoProps) {
 	const navigate = useNavigate();
 	const { setVisible } = useBlur();
+	const [itemInfo, setItemInfo] = useState(data);
+	const { catalogoData, setCatalogoData } = useCatalogoStore();
 
 	function handleVisible() {
 		setVisible(false);
 		// setModalOpen(false);
 	}
 
-	const infoInp = Object.entries(data).map((obj) => {
+	const infoInp = Object.entries(itemInfo).map((obj) => {
 		if (typeof obj[1] === "object") return null;
 		if (obj[0] === "type") return null;
 		if (obj[0] === "id") return null;
@@ -37,10 +41,103 @@ export default function InfoCard({ data, categoria }: InfoProps) {
 	let etapas = null;
 	let pecas = null;
 	let testes = null;
-	if (data.type === Categoria.aeronave) {
-		etapas = data.etapas;
-		pecas = data.pecas;
-		testes = data.testes;
+	if (itemInfo.type === Categoria.aeronave) {
+		etapas = itemInfo.etapas;
+		pecas = itemInfo.pecas;
+		testes = itemInfo.testes;
+	}
+
+	function aprovarTeste(teste: Teste) {
+		setItemInfo({ ...teste, resultado: ResultadoTeste.Aprovado });
+
+		const aeronaveIndex = catalogoData.findIndex((item) =>
+			item.testes.some((testeItem) => testeItem.id === teste.id),
+		);
+
+		if (aeronaveIndex === -1) {
+			throw new Error("Erro: teste sem aeronave");
+		}
+
+		const aeronaves = [...catalogoData];
+		aeronaves[aeronaveIndex].testes.map((item) => {
+			if (item.id === teste.id) {
+				item.resultado = ResultadoTeste.Aprovado;
+			}
+			return item;
+		});
+		setCatalogoData(aeronaves);
+		teste.resultado = ResultadoTeste.Aprovado;
+	}
+
+	function atualizarStatusPeca(peca: Peca) {
+		const newStatus =
+			peca.status === StatusPeca.producao
+				? StatusPeca.transporte
+				: StatusPeca.pronta;
+
+		peca.status = newStatus;
+		setItemInfo({ ...peca, status: newStatus });
+		setCatalogoData(
+			catalogoData.map((aeronave) => ({
+				...aeronave,
+				pecas: aeronave.pecas.map((item) =>
+					item.id === peca.id
+						? {
+								...item,
+								status: newStatus,
+							}
+						: item,
+				),
+			})),
+		);
+	}
+
+	function atualizarStatusEtapa(etapa: Etapa) {
+		const newStatus =
+			etapa.status === StatusEtapa.Pendente
+				? StatusEtapa.Andamento
+				: StatusEtapa.Concluida;
+
+		const aeronave = catalogoData.find((item) =>
+			item.etapas.some((etapaItem) => etapaItem.id === etapa.id),
+		);
+
+		if (!aeronave) {
+			throw new Error("Erro: etapa sem aeronave");
+		}
+
+		const etapaIndex = aeronave.etapas.findIndex(
+			(item) => item.id === etapa.id,
+		);
+
+		const etapaAnterior =
+			etapaIndex > 0 ? aeronave.etapas[etapaIndex - 1] : null;
+
+		if (etapaAnterior && etapaAnterior.status !== StatusEtapa.Concluida) {
+			alert("Etapa anterior não concluida");
+			return;
+		}
+
+		setCatalogoData(
+			catalogoData.map((item) => ({
+				...item,
+				etapas: item.etapas.map((etapaItem) =>
+					etapaItem.id === etapa.id
+						? {
+								...etapaItem,
+								status: newStatus,
+							}
+						: etapaItem,
+				),
+			})),
+		);
+
+		setItemInfo({
+			...etapa,
+			status: newStatus,
+		});
+
+		etapa.status = newStatus;
 	}
 
 	return (
@@ -99,12 +196,13 @@ export default function InfoCard({ data, categoria }: InfoProps) {
 					</div>
 				</section>
 
-				{data.type === Categoria.teste &&
-					data.resultado !== ResultadoTeste.Aprovado && (
+				{itemInfo.type === Categoria.teste &&
+					itemInfo.resultado !== ResultadoTeste.Aprovado && (
 						<section>
 							<button
 								type="button"
 								className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+								onClick={() => aprovarTeste(itemInfo)}
 							>
 								Aprovar
 							</button>
@@ -116,6 +214,7 @@ export default function InfoCard({ data, categoria }: InfoProps) {
 						<button
 							type="button"
 							className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+							onClick={() => atualizarStatusPeca(data)}
 						>
 							{data.status === StatusPeca.producao ? "Em Transporte" : "Pronta"}
 						</button>
@@ -139,6 +238,7 @@ export default function InfoCard({ data, categoria }: InfoProps) {
 								<button
 									type="button"
 									className="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+									onClick={() => atualizarStatusEtapa(data)}
 								>
 									{data.status === StatusEtapa.Pendente
 										? "Iniciar Etapa"

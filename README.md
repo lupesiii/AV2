@@ -1,75 +1,58 @@
-# React + TypeScript + Vite
+## Requisitos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Nodejs
 
-Currently, two official plugins are available:
+## Como executar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Clone o repositório:
 
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+git clone https://github.com/lupesiii/AV2.git
+cd AV2
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Instale as dependências:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+npm install
+```
+
+Inicie a aplicação no modo desenvolvimento:
+
+```
+npm run dev
+```
+
+## Do acesso ao sistema
+
+Existem três níveis de acesso já disponíveis para serem utilizados no sistema quando ele é iniciado a fim de facilitar o entendimento do que cada nível pode ter acesso. São os usuários para teste:
+
+```
+usuario: op
+senha: op
+nivel: operador
+```
+
+```
+usuario: eng
+senha: eng
+nivel: engenheiro
+```
+
+```
+usuario: admin
+senha: admin
+nivel: administrador
+```
+
+## Do nível de acesso dos usuários
+
+Cada usuário tem suas limitações dentro do sistema, como páginas inteiras que não podem ser acessadas ou elementos específicos do site, como botões, por exemplo. Isso pode ser conferido com melhor detalhamento através do user-flow do projeto, disponibilizado em: <a href="https://miro.com/app/board/uXjVJOtoMn8=/?share_link_id=648779581065">user-flow</a>.
+
+## Do que foi utilizado
+
+Para desenvolver a interface do sistema foram utilizados React e JavaScript. Para navegação visando uma "SPA", React-Router. Para estilização e responsividade, Tailwindcss.
+
+## Dos demais detalhes
+
+Para maior detalhamento sobre o projeto, como objetivo, requisitos funcionais e hierarquia de informações, consulte a documentação completa: <a href="https://github.com/lupesiii/AV2/blob/main/docs/Aerocode%20-%20Documenta%C3%A7%C3%A3o.pdf">Documentação Aerocode</a>

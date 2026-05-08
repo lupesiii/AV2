@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { usuarios } from "@/mockup/usuario";
+import { useCatalogoStore } from "@/store/catalogoData";
 import useAeronaves from "../hooks/useAeronaves";
 import { Categoria } from "../types/categoria";
 import CatalogoList from "./catalogo-list";
@@ -15,6 +15,11 @@ export default function Catalogo() {
 	);
 	const [_modalOpen, setModelOpen] = useState(false);
 	const aeronaves = useAeronaves();
+	const { catalogoData, setCatalogoData } = useCatalogoStore();
+
+	useEffect(() => {
+		if (catalogoData.length === 0) setCatalogoData(aeronaves);
+	}, [aeronaves, setCatalogoData, catalogoData]);
 
 	return (
 		<Container
@@ -55,16 +60,20 @@ export default function Catalogo() {
 			</section>
 
 			<section
-				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.aeronave ? "grid animate-fadeIn" : "hidden"}`}
+				className={`grid grid-cols-3 grid-flow-row gap-5 animate-fadeIn`}
 			>
-				<CatalogoList data={aeronaves} setModalOpen={setModelOpen} />
+				<CatalogoList
+					data={catalogoData}
+					categoria={categoriaSelected}
+					setModalOpen={setModelOpen}
+				/>
 			</section>
 
-			<section
+			{/* <section
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.etapa ? "grid animate-fadeIn" : "hidden"}`}
 			>
 				<CatalogoList
-					data={aeronaves.flatMap((item) => item.etapas)}
+					data={catalogoData.flatMap((item) => item.etapas)}
 					setModalOpen={setModelOpen}
 				/>
 			</section>
@@ -73,7 +82,7 @@ export default function Catalogo() {
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.peça ? "grid animate-fadeIn" : "hidden"}`}
 			>
 				<CatalogoList
-					data={aeronaves.flatMap((item) => item.pecas)}
+					data={catalogoData.flatMap((item) => item.pecas)}
 					setModalOpen={setModelOpen}
 				/>
 			</section>
@@ -82,7 +91,7 @@ export default function Catalogo() {
 				className={`grid grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.teste ? "grid animate-fadeIn" : "hidden"}`}
 			>
 				<CatalogoList
-					data={aeronaves.flatMap((item) => item.testes)}
+					data={catalogoData.flatMap((item) => item.testes)}
 					setModalOpen={setModelOpen}
 				/>
 			</section>
@@ -91,7 +100,7 @@ export default function Catalogo() {
 				className={`grid grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.funcionario ? "grid animate-fadeIn" : "hidden"}`}
 			>
 				<CatalogoList data={usuarios} setModalOpen={setModelOpen} />
-			</section>
+			</section> */}
 		</Container>
 	);
 }

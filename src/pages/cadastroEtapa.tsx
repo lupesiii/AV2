@@ -34,10 +34,7 @@ export default function CadastroEtapa() {
 		}
 
 		if (item.type === Categoria.aeronave) {
-			const idNewEtapa =
-				item.etapas.length === 0
-					? 0
-					: Number(item.etapas[item.etapas.length - 1].id) + 1;
+			const idNewEtapa = crypto.randomUUID();
 
 			item.etapas.push({
 				...newEtapa,
@@ -129,11 +126,9 @@ export default function CadastroEtapa() {
 								name="status"
 								onChange={handleChange}
 								className="w-full rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none transition focus:border-slate-900"
-								required
+								disabled
 							>
 								<option value={StatusEtapa.Pendente}>Pendente</option>
-								<option value={StatusEtapa.Andamento}>Andamento</option>
-								<option value={StatusEtapa.Concluida}>Concluida</option>
 							</select>
 						</div>
 
