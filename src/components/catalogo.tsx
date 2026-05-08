@@ -1,29 +1,23 @@
-import { useContext, useState } from "react";
-import { BlurContext } from "../context/blurContext";
-import { ItemContext } from "../context/itemContext";
-import useAeronaves from "../hook/useAeronaves";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { etapas } from "@/mockup/etapas";
+import { pecas } from "@/mockup/pecas";
+import { testes } from "@/mockup/testes";
+import { usuarios } from "@/mockup/usuario";
+import useAeronaves from "../hooks/useAeronaves";
 import { Categoria } from "../types/categoria";
 import CatalogoList from "./catalogo-list";
 import CategoriaSearch from "./categorias-search";
 import Container from "./container";
-import InfoCard from "./info-card";
 import Text from "./text";
 
 export default function Catalogo() {
+	const navigate = useNavigate();
 	const [categoriaSelected, setCategoriaSelected] = useState<Categoria>(
 		Categoria.aeronave,
 	);
-	const [modalOpen, setModelOpen] = useState(false);
-
+	const [_modalOpen, setModelOpen] = useState(false);
 	const aeronaves = useAeronaves();
-	const itemValue = useContext(ItemContext);
-	const blurValue = useContext(BlurContext);
-
-	function handleVisible() {
-		if (!blurValue) return;
-
-		blurValue.setVisible(!blurValue.visible);
-	}
 
 	return (
 		<Container
@@ -43,64 +37,55 @@ export default function Catalogo() {
 					setCategoriaSelected={setCategoriaSelected}
 					className="justify-self-end row-start-2 row-end-2"
 				/>
-				<button
-					type="button"
-					onClick={handleVisible}
-					className="bg-azul px-3 rounded-md text-white"
-				>
-					Cadastrar aeronave
-				</button>
+				{categoriaSelected === Categoria.aeronave && (
+					<button
+						type="button"
+						onClick={() => navigate("/cadastro/aeronave")}
+						className="bg-azul px-3 rounded-md text-white"
+					>
+						Cadastrar Aeronave
+					</button>
+				)}
+				{categoriaSelected === Categoria.funcionario && (
+					<button
+						type="button"
+						onClick={() => navigate("/cadastro/funcionario")}
+						className="bg-azul px-3 rounded-md text-white"
+					>
+						Cadastrar Funcionario
+					</button>
+				)}
 			</section>
 
 			<section
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.aeronave ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList
-					data={aeronaves}
-					categoria={Categoria.aeronave}
-					setModalOpen={setModelOpen}
-				/>
+				<CatalogoList data={aeronaves} setModalOpen={setModelOpen} />
 			</section>
 
 			<section
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.etapa ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList
-					data={aeronaves.flatMap((item) => item.etapas)}
-					categoria={Categoria.etapa}
-					setModalOpen={setModelOpen}
-				/>
+				<CatalogoList data={etapas} setModalOpen={setModelOpen} />
 			</section>
 
 			<section
 				className={`grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.peça ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList
-					data={aeronaves.flatMap((item) => item.pecas)}
-					categoria={Categoria.peça}
-					setModalOpen={setModelOpen}
-				/>
+				<CatalogoList data={pecas} setModalOpen={setModelOpen} />
 			</section>
 
 			<section
 				className={`grid grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.teste ? "grid animate-fadeIn" : "hidden"}`}
 			>
-				<CatalogoList
-					data={aeronaves.flatMap((item) => item.testes)}
-					categoria={Categoria.teste}
-					setModalOpen={setModelOpen}
-				/>
+				<CatalogoList data={testes} setModalOpen={setModelOpen} />
 			</section>
 
-			{itemValue?.item && modalOpen && (
-				<InfoCard
-					data={itemValue.item}
-					titulo="Teste"
-					subtitulo="Teste"
-					categoria={categoriaSelected}
-					setModalOpen={setModelOpen}
-				/>
-			)}
+			<section
+				className={`grid grid-cols-3 grid-flow-row gap-5 ${categoriaSelected === Categoria.funcionario ? "grid animate-fadeIn" : "hidden"}`}
+			>
+				<CatalogoList data={usuarios} setModalOpen={setModelOpen} />
+			</section>
 		</Container>
 	);
 }

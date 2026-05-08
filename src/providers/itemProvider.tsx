@@ -1,11 +1,15 @@
 import { type ReactNode, useState } from "react";
+import type { Funcionario } from "@/types/funcionario";
 import { ItemContext } from "../context/itemContext";
 import { type Aeronave, TipoAeronave } from "../types/aeronave";
+import { Categoria } from "../types/categoria";
 import type { Etapa } from "../types/etapa";
 import type { Peca } from "../types/peca";
 import type { Teste } from "../types/teste";
 
 const aeronaveMock: Aeronave = {
+	id: "0",
+	type: Categoria.aeronave,
 	codigo: "",
 	modelo: "",
 	tipo: TipoAeronave.Comercial,
@@ -21,9 +25,9 @@ interface ItemProviderProps {
 }
 
 export default function ItemProvider({ children }: ItemProviderProps) {
-	const [item, setItem] = useState<Aeronave | Etapa | Peca | Teste>(
-		aeronaveMock,
-	);
+	const [item, setItem] = useState<
+		Aeronave | Etapa | Peca | Teste | Funcionario
+	>(aeronaveMock);
 
 	return (
 		<ItemContext.Provider value={{ item, setItem }}>

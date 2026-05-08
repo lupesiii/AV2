@@ -1,3 +1,4 @@
+import type { Categoria } from "./categoria";
 import type { Funcionario } from "./funcionario";
 
 export enum StatusEtapa {
@@ -7,6 +8,8 @@ export enum StatusEtapa {
 }
 
 export interface Etapa {
+	id: string;
+	type: Categoria.etapa;
 	nome: string;
 	prazo: string;
 	status: StatusEtapa;

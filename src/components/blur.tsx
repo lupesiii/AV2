@@ -1,19 +1,16 @@
-import { useContext } from "react";
-import { BlurContext } from "../context/blurContext";
+import { useBlur } from "@/hooks/useBlur";
 
 export default function Blur() {
-	const blurValue = useContext(BlurContext);
+	const { setVisible } = useBlur();
 
 	function handleVisible() {
-		if (!blurValue) return;
-
-		blurValue.setVisible(!blurValue.visible);
+		setVisible(false);
 	}
 
 	return (
 		<button
 			type="button"
-			className="absolute inset-0 blur_div"
+			className="absolute inset-0 blur_div z-2"
 			onClick={handleVisible}
 		></button>
 	);

@@ -1,3 +1,5 @@
+import type { Categoria } from "./categoria";
+
 export enum TipoPeca {
 	Nacional = "NACIONAL",
 	Importada = "IMPORTADA",
@@ -10,6 +12,8 @@ export enum StatusPeca {
 }
 
 export interface Peca {
+	id: string;
+	type: Categoria.peça;
 	nome: string;
 	tipo: TipoPeca;
 	fornecedor: string;

@@ -5,9 +5,9 @@ interface ItemCardProps extends ComponentProps<"section"> {
 	titulo: string;
 	subtitulo: string;
 	campo1: string;
-	valor1: string;
+	valor1: string | number;
 	campo2?: string;
-	valor2?: string;
+	valor2?: string | number;
 	tipo?: string;
 }
 

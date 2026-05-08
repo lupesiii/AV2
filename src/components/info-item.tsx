@@ -1,22 +1,23 @@
+import { Timer } from "lucide-react";
 import type { ComponentProps } from "react";
 import Text from "./text";
 
-interface CatalogoSmallItemProps extends ComponentProps<"section"> {
+interface InfoItemProps extends ComponentProps<"section"> {
 	titulo: string;
 	subtitulo: string;
 	adicional: string;
 }
 
-export default function CatalogoSmallItem({
+export default function InfoItem({
 	titulo,
 	subtitulo,
 	adicional,
 	...props
-}: CatalogoSmallItemProps) {
+}: InfoItemProps) {
 	return (
 		<section
 			{...props}
-			className="flex justify-between items-center p-5 border border-black/10 shadow-lg rounded-md"
+			className="flex justify-between items-center p-5 border border-black/10 rounded-md "
 		>
 			<div className="flex flex-col justify-center gap-2 w-fit">
 				<Text>{titulo}</Text>
@@ -24,7 +25,10 @@ export default function CatalogoSmallItem({
 					{subtitulo}
 				</Text>
 			</div>
-			<div className="inline-flex items-center gap-1 h-fit text-[14px] bg-gray-200 px-2 rounded-2xl lowercase first-letter:uppercase">
+			<div className="inline-flex items-center gap-1 h-fit text-[14px] bg-gray-200 px-2 rounded-2xl lowercase">
+				<Text>
+					<Timer size="15px" />
+				</Text>
 				{adicional}
 			</div>
 		</section>

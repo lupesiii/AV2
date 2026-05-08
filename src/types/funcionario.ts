@@ -1,3 +1,5 @@
+import type { Categoria } from "./categoria";
+
 export enum NivelPermissao {
 	Administrador = "ADMINISTRADOR",
 	Engenheiro = "ENGENHEIRO",
@@ -6,6 +8,7 @@ export enum NivelPermissao {
 
 export interface Funcionario {
 	id: string;
+	type: Categoria.funcionario;
 	nome: string;
 	telefone: string;
 	endereco: string;
