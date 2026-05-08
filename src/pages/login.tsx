@@ -16,6 +16,11 @@ export default function Login() {
 	const login: SubmitEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
+		if (username === "Claudio5566") {
+			alert("OLHA O EASTER EGG!!!");
+			return;
+		}
+
 		const findUser = usuarios.find((user) => {
 			if (user.usuario === username) {
 				return user;
